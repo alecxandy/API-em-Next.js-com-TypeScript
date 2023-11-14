@@ -1,13 +1,27 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { sampleUserData } from '../../../src/utils/sample-data'
 
-const handler = (_req: NextApiRequest, res: NextApiResponse) => {
+const handler = (req: NextApiRequest, res: NextApiResponse) => {
+
+  const { method } = req;
   try {
-    if (!Array.isArray(sampleUserData)) {
-      throw new Error('Cannot find user data')
+
+
+
+    switch (method) {
+      case 'GET':
+        res.status(200).json([
+          { id: 1, name: 'alexandre', method },
+          { id: 2, name: 'Yasmim', method },
+          { id: 3, name: 'Amanda', method }
+        ])
+        break;
+      default:
+        res.setHeader('Allow', ['GET', 'PUT'])
+        res.status(405).end(`Method ${method} Not Allow`)
     }
 
-    res.status(200).json(sampleUserData)
+
+
   } catch (err: any) {
     res.status(500).json({ statusCode: 500, message: err.message })
   }
